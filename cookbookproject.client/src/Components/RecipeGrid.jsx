@@ -1,20 +1,20 @@
 import RecipePreview from './RecipePreview'
-
+//import constants from '../Resources/Constants'
+import { useLocation } from 'react-router'
 function RecipeGrid() {
 
+    const location = useLocation()
     const getCategory = () => {
-       
+        const { navCategory } = location.state
+        return navCategory
     }
-    /*const getRecipeList = () => {
-        
-    }*/
 
 
     return (
       <div>
             <p>Recipe List</p>
             <p>Showing All Recipies of Type { getCategory() }</p>
-            <RecipePreview></RecipePreview>
+            <RecipePreview recipeId="thisdoesn'tmatteryet"></RecipePreview>
             <RecipePreview></RecipePreview>
         </div>
   );

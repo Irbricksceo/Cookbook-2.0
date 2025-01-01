@@ -3,13 +3,12 @@ import './Styles/App.css';
 import Navbar from './Components/Navbar'
 import Favorites from './Components/Favorites'
 import RecipeData from './Components/RecipeData'
-import RecipeGrid from './Components/RecipeGrid.1';
+import RecipeGrid from './Components/RecipeGrid';
 import Home from './Components/Home'
-import { Component } from 'react';
 import { Route, Routes} from "react-router-dom";
 
-class App extends Component {
-    render() {
+function App() {
+
         return (
             <div>
                 <div>
@@ -26,6 +25,5 @@ class App extends Component {
                 </div>
         );
     }
-}
 
 export default App;

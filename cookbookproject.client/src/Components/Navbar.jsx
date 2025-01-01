@@ -1,4 +1,6 @@
 import { NavLink } from "react-router-dom"
+import '../Styles/Navbar.css';
+
 function Navbar() {
     return (
       <div>
@@ -6,27 +8,27 @@ function Navbar() {
           <li><NavLink to="/">Home</NavLink></li>
           <li><NavLink
               to="/Recipies"
-              state={{ Category: "All" }}
+              state={{ navCategory: "All" }}
           >All Recipes</NavLink></li>
           <li><NavLink
               to="/Recipies"
-              state={{ Category: "Appetizers" }}
+              state={{ navCategory: "Appetizers" }}
           >All Appetizers</NavLink></li>
           <li><NavLink
               to="/Recipies" 
-              state={{ Category: "Entrees" }}
+              state={{ navCategory: "Entrees" }}
           >All Entrees</NavLink></li>
           <li><NavLink
               to="/Recipies"
-              state={{ Category: "Deserts" }}
+              state={{ navCategory: "Deserts" }}
           >All Deserts</NavLink></li>
           <li><NavLink
               to="/Recipies"
-              state={{ Category: "Soups" }}
+              state={{ navCategory: "Soups" }}
           >All Soups</NavLink></li>
           <li><NavLink
               to="/Recipies"
-              state={{ Category: "Breads" }}  
+              state={{ navCategory: "Breads" }}  
           >All Breads</NavLink></li>
           <li><NavLink to="/Favorites">Favorites</NavLink></li>
         </ul>

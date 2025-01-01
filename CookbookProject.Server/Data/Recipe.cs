@@ -2,6 +2,8 @@
 {
     public class Recipe
     {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
         public string Category { get; set; }
         public string Ingredients { get; set; }
         public string Steps { get; set; }
@@ -11,6 +13,8 @@
         public Nullable<int> servingsCount {  get; set; }
 
         public Recipe() {
+            this.Id = Guid.NewGuid();
+            this.Name = "";
             this.Category = "";
             this.Ingredients = "";
             this.Steps = "";
@@ -18,18 +22,23 @@
             this.PrepTime = "";
             this.CookTime = "";
         }
-        public Recipe(string category, string ingredients, string steps, string creator, string prepTime, string cookTime)
+        public Recipe(string name, string category, string ingredients, string steps, string creator, string prepTime, string cookTime)
         {
+            this.Id = Guid.NewGuid();
+            this.Name = name;
             this.Category = category;
             this.Ingredients = ingredients;
             this.Steps = steps;
             this.Creator = creator;
             this.PrepTime = prepTime;
             this.CookTime = cookTime;
+            this.servingsCount = null;
         }
 
-        public Recipe(string category, string ingredients, string steps, string creator, string prepTime, string cookTime, int servings)
+        public Recipe(string name, string category, string ingredients, string steps, string creator, string prepTime, string cookTime, int servings)
         {
+            this.Id = Guid.NewGuid();
+            this.Name = name;
             this.Category = category;
             this.Ingredients = ingredients;
             this.Steps = steps;
