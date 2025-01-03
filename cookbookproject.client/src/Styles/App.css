@@ -9,3 +9,20 @@ th, td {
     padding-left: 1rem;
     padding-right: 1rem;
 }
+
+.headerBar {
+    position: fixed;
+    top: 0;
+    background-color: #A5BFCC;
+    border-color: #7E99A3;
+    border-width: 1px;
+    width: 100vw;
+    right: 0;
+}
+
+body {
+    background-color: #F4EDD3;
+    color: #4C585B;
+}
+
+

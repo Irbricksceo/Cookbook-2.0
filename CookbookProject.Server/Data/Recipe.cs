@@ -11,6 +11,7 @@
         public string PrepTime {  get; set; }
         public string CookTime {  get; set; }
         public Nullable<int> servingsCount {  get; set; }
+        public bool isFavorite { get; set; }
 
         public Recipe() {
             this.Id = Guid.NewGuid();
@@ -21,6 +22,7 @@
             this.Creator = "";
             this.PrepTime = "";
             this.CookTime = "";
+            this.isFavorite = false;
         }
         public Recipe(string name, string category, string ingredients, string steps, string creator, string prepTime, string cookTime)
         {
@@ -33,6 +35,7 @@
             this.PrepTime = prepTime;
             this.CookTime = cookTime;
             this.servingsCount = null;
+            this.isFavorite = false;
         }
 
         public Recipe(string name, string category, string ingredients, string steps, string creator, string prepTime, string cookTime, int servings)
@@ -46,6 +49,7 @@
             this.PrepTime = prepTime;
             this.CookTime = cookTime;
             this.servingsCount = servings;
+            this.isFavorite = false;
         }
     }
 }

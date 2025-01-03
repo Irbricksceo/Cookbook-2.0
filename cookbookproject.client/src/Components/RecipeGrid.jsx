@@ -1,21 +1,27 @@
 import RecipePreview from './RecipePreview'
-//import constants from '../Resources/Constants'
+import { dummyRecipeList } from '../Resources/Constants'
 import { useLocation } from 'react-router'
 function RecipeGrid() {
 
     const location = useLocation()
-    const getCategory = () => {
-        const { navCategory } = location.state
-        return navCategory
+    const { navCategory } = location.state
+    let recipeList = dummyRecipeList
+    if (navCategory != "All") {
+        if (navCategory == "Favorites") {
+            recipeList = recipeList.filter((recipe) => recipe.isFavorite == true)
+        } else {
+            recipeList = recipeList.filter((recipe) => recipe.category == navCategory)
+        }
     }
 
-
     return (
-      <div>
+        <div>
             <p>Recipe List</p>
-            <p>Showing All Recipies of Type { getCategory() }</p>
-            <RecipePreview recipeId="thisdoesn'tmatteryet"></RecipePreview>
-            <RecipePreview></RecipePreview>
+            <p>Showing All Recipies of Type {navCategory}</p>
+            <br></br>
+            {recipeList.map((recipe) => (
+                <RecipePreview key={recipe.id}  recipe={recipe}></RecipePreview>
+            ))}
         </div>
   );
 }

@@ -30,7 +30,10 @@ function Navbar() {
               to="/Recipies"
               state={{ navCategory: "Breads" }}  
           >All Breads</NavLink></li>
-          <li><NavLink to="/Favorites">Favorites</NavLink></li>
+          <li><NavLink
+              to="/Recipies"
+              state={{ navCategory: "Favorites" }}  
+          >Favorites</NavLink></li>
         </ul>
       </div>
   );

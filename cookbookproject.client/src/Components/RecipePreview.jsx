@@ -1,27 +1,19 @@
-import { dummyRecipe } from '../Resources/Constants'
+
 import PropTypes from 'prop-types';
 import { NavLink } from "react-router-dom"
 import '../Styles/RecipePreview.css';
 function RecipePreview(props) {
 
-   let recipeDetails = dummyRecipe;
+   let recipeDetails = props.recipe
 
-    RecipePreview.propTypes = {
-        recipeId: PropTypes.string
-    };
-
-    if (props.recipeId == null) {
-        recipeDetails.name = "undefined Recipe"
-    } else {
-        //TODO: get recipe with ID from list instead of constant
-        recipeDetails.name = "Defined Recipe"
-    }
-
+    //RecipePreview.propTypes = {
+    //    recipeId: PropTypes.string
+    //};
 
     return (
         <NavLink
-            to="/Recipe"
-            state={{ recipeId: recipeDetails.id }}
+            to="/Recipe/"
+            state={{ recipeInfo: recipeDetails }}
         >
         <div className="recipePreview">
             <h3>{recipeDetails.name}</h3>
