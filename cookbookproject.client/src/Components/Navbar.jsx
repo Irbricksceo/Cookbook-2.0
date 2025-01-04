@@ -28,12 +28,19 @@ function Navbar() {
           >All Soups</NavLink></li>
           <li><NavLink
               to="/Recipies"
+              state={{ navCategory: "Salads" }}  
+          >All Salads</NavLink></li><li><NavLink
+              to="/Recipies"
               state={{ navCategory: "Breads" }}  
           >All Breads</NavLink></li>
           <li><NavLink
               to="/Recipies"
               state={{ navCategory: "Favorites" }}  
           >Favorites</NavLink></li>
+          <li><NavLink
+            to="/CreateEditRecipe"
+          >Add Recipe</NavLink>
+          </li>
         </ul>
       </div>
   );

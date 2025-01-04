@@ -16,12 +16,16 @@ function RecipeGrid() {
 
     return (
         <div>
-            <p>Recipe List</p>
-            <p>Showing All Recipies of Type {navCategory}</p>
-            <br></br>
-            {recipeList.map((recipe) => (
-                <RecipePreview key={recipe.id}  recipe={recipe}></RecipePreview>
-            ))}
+            <div className="contentHeader">
+                <h3>Recipe List</h3>
+            </div>
+            <div>
+                <p>Showing All Recipies of Type {navCategory}</p>
+                <br></br>
+                {recipeList.map((recipe) => (
+                    <RecipePreview key={recipe.id}  recipe={recipe}></RecipePreview>
+                ))}
+            </div>
         </div>
   );
 }
