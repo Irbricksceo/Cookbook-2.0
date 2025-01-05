@@ -73,7 +73,7 @@ function CreateEditRecipe() {
                             required >
                             <option value="Appetizers">Appetizers</option>
                             <option value="Entrees">Entrees</option>
-                            <option value="Deserts">Deserts</option>
+                            <option value="Deserts">Desserts</option>
                             <option value="Soups">Soups</option>
                             <option value="Salads">Salads</option>
                             <option value="Breads">Breads</option>

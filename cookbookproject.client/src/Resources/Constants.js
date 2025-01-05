@@ -30,7 +30,7 @@ export const dummyRecipeList = [
     {
         id: 'f0df4918-aa7d-4251-a104-a737b54b3f62',
         name: 'testRecipe2',
-        category: 'Deserts',
+        category: 'Desserts',
         ingredients: '1 Large Egg,\nTwo Cups Water,\nThree cups other stuff',
         steps: 'Combine Ingredients\nBake in oven for 30 minutes on 400 degrees\nRemove from oven and let stand for 20 minutes',
         creator: 'Heather Murphy',

@@ -20,8 +20,8 @@ function Navbar() {
           >All Entrees</NavLink></li>
           <li><NavLink
               to="/Recipies"
-              state={{ navCategory: "Deserts" }}
-          >All Deserts</NavLink></li>
+              state={{ navCategory: "Desserts" }}
+          >All Desserts</NavLink></li>
           <li><NavLink
               to="/Recipies"
               state={{ navCategory: "Soups" }}
