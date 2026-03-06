@@ -28,20 +28,24 @@ function RecipeGrid() {
         getRecipeList();
         return () => { mounted = false; };
     }, [])
-    
+
+    var displayed = recipeList;
 
     if (navCategory != "All") {
         if (navCategory == "Favorites") {
-            recipeList = recipeList.filter((recipe) => recipe.isFavorite == true)
+            displayed = recipeList.filter((recipe) => recipe.isFavorite == true)
         } else {
-            recipeList = recipeList.filter((recipe) => recipe.category == navCategory)
+            displayed = recipeList.filter((recipe) => recipe.category == navCategory)
         }
     }
+
     if (loading) {
         return <div>Loading recipes...</div>;
     }
 
-    const displayed = recipeList;
+    if (!displayed.length > 0) {
+        return <div>Looks like there are no recipies of Type {navCategory}, you should add one!</div>
+    }
 
     return (
                 <div>
@@ -51,7 +55,8 @@ function RecipeGrid() {
                     <div>
                         <p>Showing All Recipies of Type {navCategory}</p>
                         <br></br>
-                        {displayed.map((recipe) => (
+                        {
+                            displayed.map((recipe) => (
                             <RecipePreview key={recipe.id} recipe={recipe}></RecipePreview>
                         ))}
                     </div>
