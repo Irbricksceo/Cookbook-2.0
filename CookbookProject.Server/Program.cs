@@ -1,11 +1,25 @@
+using CookbookProject.Server.Managers;
+using CookbookProject.Server.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Minimal API - register manager and keep Swagger support
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<RecipeManager>();
+// Configure CORS to allow the React dev server (adjust origins as needed)
+var corsPolicyName = "AllowReactDevClient";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: corsPolicyName,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:64061", "https://localhost:64061", "http://localhost:5173", "https://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 var app = builder.Build();
 
@@ -21,9 +35,48 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+// Enable CORS
+app.UseCors(corsPolicyName);
 
-app.MapControllers();
+//app.UseAuthorization();
+
+// Minimal API endpoints for recipes
+app.MapGet("/api/recipes/{id:guid}", (Guid id, RecipeManager mgr) =>
+{
+    var recipe = mgr.getRecipe(id);
+    return recipe is not null ? Results.Ok(recipe) : Results.NotFound();
+});
+
+app.MapGet("/api/recipes/category/{category}", (string category, RecipeManager mgr) =>
+{
+    var recipes = mgr.GetRecipesByCategory(category);
+    return Results.Ok(recipes);
+});
+
+app.MapGet("/api/recipes/all", (RecipeManager mgr) =>
+{
+    var recipes = mgr.GetAllRecipes();
+    return Results.Ok(recipes);
+});
+
+app.MapPost("/api/recipes", (Recipe recipe, RecipeManager mgr) =>
+{
+    mgr.createRecipe(recipe);
+    return Results.Created($"/api/recipes/{recipe.Id}", recipe);
+});
+
+app.MapPut("/api/recipes/{id:guid}", (Guid id, Recipe recipe, RecipeManager mgr) =>
+{
+    if (id != recipe.Id) return Results.BadRequest();
+    mgr.updateRecipe(recipe);
+    return Results.NoContent();
+});
+
+app.MapDelete("/api/recipes/{id:guid}", (Guid id, RecipeManager mgr) =>
+{
+    mgr.deleteRecipe(id);
+    return Results.NoContent();
+});
 
 app.MapFallbackToFile("/index.html");
 

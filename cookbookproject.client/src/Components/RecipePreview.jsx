@@ -6,10 +6,6 @@ function RecipePreview(props) {
 
    let recipeDetails = props.recipe
 
-    //RecipePreview.propTypes = {
-    //    recipeId: PropTypes.string
-    //};
-
     return (
         <NavLink
             to="/Recipe/"
