@@ -1,0 +1,34 @@
+//RUN FIRST
+CREATE SCHEMA `cookbook`
+
+//THEN RUN THIS
+CREATE TABLE `cookbook`.`recipes` (
+  `Id` VARCHAR(36) NOT NULL,
+  `Name` VARCHAR(100) NULL,
+  `Category` VARCHAR(50) NULL,
+  `Ingredients` VARCHAR(500) NULL,
+  `Steps` VARCHAR(500) NULL,
+  `Creator` VARCHAR(100) NULL,
+  `PrepTime` VARCHAR(100) NULL,
+  `CookTime` VARCHAR(100) NULL,
+  `servingsCount` INT NULL,
+  `isFavorite` TINYINT NOT NULL DEFAULT 0,
+  UNIQUE INDEX `Id_UNIQUE` (`Id` ASC) VISIBLE,
+  PRIMARY KEY (`Id`));
+
+  //Run to load a test Recipe
+
+  INSERT into recipes (Id,Name,Category,Ingredients,Steps,Creator,PrepTime,CookTime,servingsCount,isFavorite)
+VALUES
+(
+    'ec69274d-0832-4c76-9a6a-6cdd6232bb69',
+    'testRecipe1',
+    'Entrees',
+    '1 Large Egg,\nTwo Cups Water,\nThree cups other stuff',
+    'Combine Ingredients\nBake in oven for 30 minutes on 400 degrees\nRemove from oven and let stand for 20 minutes',
+    'Heather Murphy',
+    '10 Minutes',
+    '20 Minutes',
+    '4',
+    false
+)

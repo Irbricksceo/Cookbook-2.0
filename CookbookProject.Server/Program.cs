@@ -10,6 +10,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<RecipeManager>();
 // Configure CORS to allow the React dev server (adjust origins as needed)
 var corsPolicyName = "AllowReactDevClient";
+
+var conString = builder.Configuration["cookbook:conString"];
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: corsPolicyName,
@@ -43,38 +46,38 @@ app.UseCors(corsPolicyName);
 // Minimal API endpoints for recipes
 app.MapGet("/api/recipes/{id:guid}", (Guid id, RecipeManager mgr) =>
 {
-    var recipe = mgr.getRecipe(id);
+    var recipe = mgr.getRecipe(id, conString);
     return recipe is not null ? Results.Ok(recipe) : Results.NotFound();
 });
 
 app.MapGet("/api/recipes/category/{category}", (string category, RecipeManager mgr) =>
 {
-    var recipes = mgr.GetRecipesByCategory(category);
+    var recipes = mgr.GetRecipesByCategory(category, conString);
     return Results.Ok(recipes);
 });
 
 app.MapGet("/api/recipes/all", (RecipeManager mgr) =>
 {
-    var recipes = mgr.GetAllRecipes();
+    var recipes = mgr.GetAllRecipes(conString);
     return Results.Ok(recipes);
 });
 
 app.MapPost("/api/recipes", (Recipe recipe, RecipeManager mgr) =>
 {
-    mgr.createRecipe(recipe);
+    mgr.createRecipe(recipe, conString);
     return Results.Created($"/api/recipes/{recipe.Id}", recipe);
 });
 
 app.MapPut("/api/recipes/{id:guid}", (Guid id, Recipe recipe, RecipeManager mgr) =>
 {
     if (id != recipe.Id) return Results.BadRequest();
-    mgr.updateRecipe(recipe);
+    mgr.updateRecipe(recipe, conString);
     return Results.NoContent();
 });
 
 app.MapDelete("/api/recipes/{id:guid}", (Guid id, RecipeManager mgr) =>
 {
-    mgr.deleteRecipe(id);
+    mgr.deleteRecipe(id, conString);
     return Results.NoContent();
 });
 
