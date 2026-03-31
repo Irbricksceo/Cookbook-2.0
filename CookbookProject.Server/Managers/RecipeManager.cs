@@ -16,55 +16,110 @@ namespace CookbookProject.Server.Managers
 
         public void createRecipe(Recipe recipe, String conString)
         {
-            //Recipe recipe1 = new Recipe("Spaghetti Bolognese", "Italian", "Spaghetti, ground beef, tomato sauce, onions, garlic", "1. Cook spaghetti. 2. Brown beef with onions and garlic. 3. Add tomato sauce and simmer. 4. Serve sauce over spaghetti.", "Chef Mario", "15 mins", "30 mins");
-            String qry = "INSERT into recipes(Id, Name, Category, Ingredients, Steps, Creator, PrepTime, CookTime, servingsCount, isFavorite) VALUES ( " + recipe.Id + ", " + recipe.Name + ", " + recipe.Category + ", " + recipe.Ingredients + ", " + recipe.Steps + ", " + recipe.Creator + ", "+ recipe.PrepTime + ", " + recipe.CookTime + ", " + recipe.servingsCount + ", " + recipe.isFavorite + ')';
-            executeQuery(qry, conString);
+            // Use parameterized query to avoid SQL injection
+            string qry = "INSERT INTO recipes(Id, Name, Category, Ingredients, Steps, Creator, PrepTime, CookTime, servingsCount, isFavorite) " +
+                         "VALUES (@Id, @Name, @Category, @Ingredients, @Steps, @Creator, @PrepTime, @CookTime, @servingsCount, @isFavorite);";
+
+            var parameters = new Dictionary<string, object?>
+            {
+                { "@Id", recipe.Id },
+                { "@Name", recipe.Name },
+                { "@Category", recipe.Category },
+                { "@Ingredients", recipe.Ingredients },
+                { "@Steps", recipe.Steps },
+                { "@Creator", recipe.Creator },
+                { "@PrepTime", recipe.PrepTime },
+                { "@CookTime", recipe.CookTime },
+                { "@servingsCount", (object?)recipe.servingsCount ?? DBNull.Value },
+                { "@isFavorite", recipe.isFavorite }
+            };
+
+            executeQuery(qry, conString, parameters);
         }
 
         public void updateRecipe(Recipe recipe, String conString)
         { 
-            String qry = "UPDATE recipes SET Name = " + recipe.Name + ", Category = " + recipe.Category + ", Ingredients = " + recipe.Ingredients + ", Steps = " + recipe.Steps + ", Creator = " + recipe.Creator + ", PrepTime = " + recipe.PrepTime + ", CookTime = " + recipe.CookTime + ", servingsCount = " + recipe.servingsCount + ", isFavorite = " + recipe.isFavorite + " WHERE Id = " + recipe.Id;
-            executeQuery(qry, conString);
+            string qry = "UPDATE recipes SET Name = @Name, Category = @Category, Ingredients = @Ingredients, Steps = @Steps, " +
+                         "Creator = @Creator, PrepTime = @PrepTime, CookTime = @CookTime, servingsCount = @servingsCount, isFavorite = @isFavorite " +
+                         "WHERE Id = @Id;";
+
+            var parameters = new Dictionary<string, object?>
+            {
+                { "@Id", recipe.Id },
+                { "@Name", recipe.Name },
+                { "@Category", recipe.Category },
+                { "@Ingredients", recipe.Ingredients },
+                { "@Steps", recipe.Steps },
+                { "@Creator", recipe.Creator },
+                { "@PrepTime", recipe.PrepTime },
+                { "@CookTime", recipe.CookTime },
+                { "@servingsCount", (object?)recipe.servingsCount ?? DBNull.Value },
+                { "@isFavorite", recipe.isFavorite }
+            };
+
+            executeQuery(qry, conString, parameters);
         }
 
         public void deleteRecipe(Guid id, String conString)
         { 
-            String qry = "DELETE FROM recipes WHERE Id = " + id;
-            executeQuery(qry, conString);
+            string qry = "DELETE FROM recipes WHERE Id = @Id;";
+            var parameters = new Dictionary<string, object?> { { "@Id", id } };
+            executeQuery(qry, conString, parameters);
         }
 
         public Recipe? getRecipe(Guid id, String conString)
         {
-            String qry = "SELECT * FROM recipes WHERE Id = " + id;
-            List<Recipe> results = executeQueryGetData(qry, conString);
+            string qry = "SELECT * FROM recipes WHERE Id = @Id;";
+            var parameters = new Dictionary<string, object?> { { "@Id", id } };
+            List<Recipe> results = executeQueryGetData(qry, conString, parameters);
             return results.FirstOrDefault();
         }
 
         public List<Recipe> GetRecipesByCategory(String category, String conString)
         {
-            string query = "SELECT * FROM recipes WHERE Category = " + category;
-            List<Recipe> recipes = executeQueryGetData(query, conString);
+            string query = "SELECT * FROM recipes WHERE Category = @Category;";
+            var parameters = new Dictionary<string, object?> { { "@Category", category } };
+            List<Recipe> recipes = executeQueryGetData(query, conString, parameters);
             return recipes;
         }
 
         public List<Recipe> GetAllRecipes(String conString)
         {
-            string query = "SELECT * FROM recipes";
-            List<Recipe> recipes = executeQueryGetData(query, conString);
+            string query = "SELECT * FROM recipes;";
+            List<Recipe> recipes = executeQueryGetData(query, conString, null);
             return recipes;
         }
         
-        public void executeQuery(string query, String conString)
+        public void executeQuery(string query, String conString, Dictionary<string, object?>? parameters = null)
         {
-            //execute query against DB, return results as needed
-        }
+            using var con = new MySqlConnection(conString);
+            con.Open();
+            using var cmd = new MySqlCommand(query, con);
 
-        public List<Recipe> executeQueryGetData(string query, String conString)
+            if (parameters != null)
+            {
+                foreach (var kvp in parameters)
+                {
+                    cmd.Parameters.AddWithValue(kvp.Key, kvp.Value ?? DBNull.Value);
+                }
+            }
+
+            cmd.ExecuteNonQuery();
+        }
+        public List<Recipe> executeQueryGetData(string query, String conString, Dictionary<string, object?>? parameters = null)
         {
             List<Recipe> recipes = new List<Recipe>();
-            MySqlConnection con = new MySqlConnection(conString);
+            using var con = new MySqlConnection(conString);
             con.Open();
-            MySqlCommand cmd = new MySqlCommand(query, con);
+            using var cmd = new MySqlCommand(query, con);
+
+            if (parameters != null)
+            {
+                foreach (var kvp in parameters)
+                {
+                    cmd.Parameters.AddWithValue(kvp.Key, kvp.Value ?? DBNull.Value);
+                }
+            }
 
             using (MySqlDataReader reader = cmd.ExecuteReader())
             {
@@ -80,7 +135,8 @@ namespace CookbookProject.Server.Managers
                         Creator = reader.GetString("Creator"),
                         PrepTime = reader.GetString("PrepTime"),
                         CookTime = reader.GetString("CookTime"),
-                        servingsCount = reader.GetInt32("servingsCount"),
+                        // servingsCount may be nullable in DB
+                        servingsCount = reader.IsDBNull(reader.GetOrdinal("servingsCount")) ? null : reader.GetInt32("servingsCount"),
                         isFavorite = reader.GetBoolean("isFavorite")
                     };
                     recipes.Add(recipe);

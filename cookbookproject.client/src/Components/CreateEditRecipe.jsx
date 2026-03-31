@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useLocation } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 function CreateEditRecipe() {
 
@@ -18,29 +18,57 @@ function CreateEditRecipe() {
         isFavorite: false
     }
 
-    //define the fields, still need to hook up the above
-    const [recipeName, setRecipeName] = useState("");
-    const [recipeCategory, setRecipeCategory] = useState("");
-    const [ingredients, setIngredients] = useState("");
-    const [steps, setSteps] = useState("");
-    const [creator, setCreator] = useState("");
-    const [prepTime, setPrepTime] = useState(null);
-    const [cookTime, setCookTime] = useState(null);
-    const [servingsCount, setServingsCount] =useState(null);
-    //const [isFavorite, setIsFavorite] = useState("");
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    //define the fields and initialize from editingItem
+    const [recipeName, setRecipeName] = useState(editingItem.name || "");
+    const [recipeCategory, setRecipeCategory] = useState(editingItem.category || "");
+    const [ingredients, setIngredients] = useState(editingItem.ingredients || "");
+    const [steps, setSteps] = useState(editingItem.steps || "");
+    const [creator, setCreator] = useState(editingItem.creator || "");
+    const [prepTime, setPrepTime] = useState(editingItem.prepTime ?? "");
+    const [cookTime, setCookTime] = useState(editingItem.cookTime ?? "");
+    const [servingsCount, setServingsCount] = useState(editingItem.servingsCount ?? "");
+    const [isFavorite] = useState(editingItem.isFavorite ?? false);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(
-            recipeName,
-            recipeCategory,
+
+        const payload = {
+            // include id for edits
+            ...(editingItem.id ? { id: editingItem.id } : {}),
+            name: recipeName,
+            category: recipeCategory,
             ingredients,
             steps,
             creator,
             prepTime,
             cookTime,
-            servingsCount
-        )
+            servingsCount: servingsCount === '' ? null : Number(servingsCount),
+            isFavorite
+        };
+
+        try {
+            const url = editingItem.id && editingItem.id !== '' ? `https://localhost:7041/api/recipes/${editingItem.id}` : 'https://localhost:7041/api/recipes';
+            const method = editingItem.id && editingItem.id !== '' ? 'PUT' : 'POST';
+
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || `${res.status} ${res.statusText}`);
+            }
+
+            // on success navigate back to home or list
+            navigate('/');
+        } catch (err) {
+            console.error('Failed to save recipe', err);
+            alert('Failed to save recipe: ' + err.message);
+        }
     };
 
     return (
@@ -51,7 +79,7 @@ function CreateEditRecipe() {
             <div className="editForm">
                 <h3>Recipe Details</h3>
                 <fieldset>
-                    <form action="#" method="get">
+                    <form onSubmit={handleSubmit}>
                         <input
                             type="text"
                             name="recipeName"
@@ -71,6 +99,7 @@ function CreateEditRecipe() {
                                 setRecipeCategory(e.target.value)
                             }
                             required >
+                            <option value="">Select category</option>
                             <option value="Appetizers">Appetizers</option>
                             <option value="Entrees">Entrees</option>
                             <option value="Deserts">Desserts</option>
@@ -127,6 +156,7 @@ function CreateEditRecipe() {
                             id="ingredients"
                             cols="30"
                             rows="10"
+                            value={ingredients}
                             onChange={(e) =>
                                 setIngredients(e.target.value)
                             }
@@ -139,6 +169,7 @@ function CreateEditRecipe() {
                             id="steps"
                             cols="30"
                             rows="10"
+                            value={steps}
                             onChange={(e) =>
                                 setSteps(e.target.value)
                             }
@@ -149,7 +180,6 @@ function CreateEditRecipe() {
                         <button
                             type="submit"
                             value="Submit"
-                            onClick={(e) => handleSubmit(e)}
                         >Submit</button>
                     </form>
                 </fieldset>
