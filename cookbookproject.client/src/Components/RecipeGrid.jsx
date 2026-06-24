@@ -1,7 +1,7 @@
 import RecipePreview from './RecipePreview'
-import { dummyRecipeList } from '../Resources/Constants'
 import { useLocation } from 'react-router'
 import { useEffect, useState } from 'react'
+import '../Styles/RecipeGrid.css'
 
 function RecipeGrid() {
 
@@ -19,7 +19,6 @@ function RecipeGrid() {
                 const data = await res.json();
                 if (mounted) setRecipeList(data);
             } catch (err) {
-                // optionally handle error
                 console.error('Failed to load recipes', err);
             } finally {
                 if (mounted) setLoading(false);
@@ -48,20 +47,20 @@ function RecipeGrid() {
     }
 
     return (
-                <div>
-                    <div className="contentHeader">
-                        <h3>Recipe List</h3>
-                    </div>
-                    <div>
-                        <p>Showing All Recipies of Type {navCategory}</p>
-                        <br></br>
-                        {
-                            displayed.map((recipe) => (
-                            <RecipePreview key={recipe.id} recipe={recipe}></RecipePreview>
-                        ))}
-                    </div>
+        <div>
+            <div className="contentHeader">
+                <h3>Recipe List</h3>
+            </div>
+            <div className="recipeGridContainer">
+                <p className="recipeGridSubtitle">Showing all recipes of type: {navCategory}</p>
+                <div className="recipeGrid">
+                    {displayed.map((recipe) => (
+                        <RecipePreview key={recipe.id} recipe={recipe} />
+                    ))}
                 </div>
-              );
+            </div>
+        </div>
+    );
 }
 
 export default RecipeGrid;

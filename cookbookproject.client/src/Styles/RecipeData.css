@@ -1,0 +1,71 @@
+.recipeCard {
+    max-width: 680px;
+    margin: 1.5rem auto 0;
+    background-color: #A5BFCC;
+    border: 2px solid #7E99A3;
+    border-radius: 10px;
+    padding: 1.75rem 2rem;
+    box-shadow: 0 2px 8px rgba(76, 88, 91, 0.12);
+    text-align: left;
+}
+
+.recipeCardHeader {
+    margin-bottom: 1.5rem;
+}
+
+.recipeCreator {
+    margin: 0 0 0.75rem 0;
+    font-size: 0.95rem;
+    opacity: 0.8;
+}
+
+.recipeMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.metaChip {
+    background-color: #F4EDD3;
+    border: 1px solid #7E99A3;
+    border-radius: 20px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+    color: #4C585B;
+}
+
+.editButton {
+    display: inline-block;
+    padding: 0.45rem 1.25rem;
+    background-color: #7E99A3;
+    color: #F4EDD3;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background-color 0.15s;
+}
+
+.editButton:hover {
+    background-color: #4C585B;
+}
+
+.recipeSection {
+    border-top: 1px solid #7E99A3;
+    padding-top: 1.25rem;
+    margin-top: 1.25rem;
+}
+
+.recipeSection h3 {
+    margin: 0 0 0.6rem 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #4C585B;
+}
+
+.recipeSection p {
+    margin: 0;
+    white-space: pre-wrap;
+    line-height: 1.6;
+}

@@ -1,0 +1,98 @@
+.editForm {
+    text-align: left;
+    max-width: 680px;
+    margin: 1.5rem auto 0;
+}
+
+.editForm fieldset {
+    border: 2px solid #7E99A3;
+    border-radius: 10px;
+    padding: 1.75rem 2rem;
+    background-color: #A5BFCC;
+    box-shadow: 0 2px 8px rgba(76, 88, 91, 0.12);
+}
+
+.formTitle {
+    margin: 0 0 1.25rem 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #4C585B;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.formGroup label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    color: #4C585B;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #7E99A3;
+    border-radius: 6px;
+    background-color: #F4EDD3;
+    color: #4C585B;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+    outline: none;
+    border-color: #4C585B;
+    box-shadow: 0 0 0 2px rgba(76, 88, 91, 0.15);
+}
+
+.formGroup textarea {
+    resize: vertical;
+    min-height: 140px;
+}
+
+.formRow {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.formRow-3 {
+    grid-template-columns: 2fr 2fr 1fr;
+}
+
+.formRow-2 {
+    grid-template-columns: 1fr 1fr;
+}
+
+.formRow .formGroup {
+    margin-bottom: 0;
+}
+
+.editForm button[type="submit"] {
+    margin-top: 0.5rem;
+    padding: 0.6rem 2rem;
+    background-color: #7E99A3;
+    color: #F4EDD3;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s, transform 0.1s;
+}
+
+.editForm button[type="submit"]:hover {
+    background-color: #4C585B;
+}
+
+.editForm button[type="submit"]:active {
+    transform: scale(0.98);
+}
